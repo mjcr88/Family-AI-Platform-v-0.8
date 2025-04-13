@@ -93,6 +93,45 @@ This workspace is designed to host and manage multiple services and applications
 4. **Development Tools**:
    - Use the `dev-tools/` directory for managing n8n and WebUI.
 
+## Outline Wiki Setup
+
+### Features
+- A simple make and bash script to generate all required configurations.
+- A `docker-compose` setup to run the service.
+- An OIDC server to manage users without requiring Slack or Google login.
+
+### How to Use
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/vicalloy/outline-docker-compose.git
+   cd outline-docker-compose
+   ```
+
+2. **Initialize the Configuration:**
+   ```bash
+   cp scripts/config.sh.sample scripts/config.sh
+   # Update the configuration file as needed:
+   vim scripts/config.sh
+   ```
+
+3. **Install and Start the Service:**
+   ```bash
+   make install
+   ```
+   This will:
+   - Create a `docker-compose` configuration file.
+   - Start the service.
+   - Initialize the OIDC server (add an OIDC client for Outline and create a superuser).
+
+4. **Access the Service:**
+   - Open [http://127.0.0.1:8888](http://127.0.0.1:8888) to log in to Outline.
+   - To add new users, visit [http://127.0.0.1:8888/uc/admin/auth/user/](http://127.0.0.1:8888/uc/admin/auth/user/).
+
+### Notes
+- Outline Wiki 0.72.0-1 supports local file storage. Set `FILE_STORAGE=local` in `scripts/config.sh` to use local file storage (MinIO is not required).
+- Ensure that the required ports are available before starting the service.
+
 ## Notes
 - Ensure all required environment variables are set before starting the services.
 - Refer to the individual `README.md` files in each service directory for more details.

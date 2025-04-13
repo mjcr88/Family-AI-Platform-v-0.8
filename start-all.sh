@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Starting Outline Docker Compose services..."
+docker-compose -f outline-docker-compose/docker-compose.yml up -d
+
 echo "Starting Outline services..."
 docker-compose -f outline/docker-compose.yml up -d
 
