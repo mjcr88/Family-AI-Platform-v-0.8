@@ -1,0 +1,39 @@
+services:
+  # NATS - the Service Bus for inter-component communication
+  nats:
+    image: nats:latest # Container image to use
+    ports:
+      - "4222:4222" # Client connections port (host:container)
+      - "8222:8222" # HTTP monitoring port
+    volumes:
+      - nats-data:/data # Persistent storage for message data
+    restart: unless-stopped # Ensure the container keeps running
+    # In production, consider pinning image version, adding health checks, restart policy
+
+  # ArangoDB - graph database for structured knowledge
+  arangodb:
+    image: arangodb:latest
+    environment:
+      # Password sourced from .env file for security
+      - ARANGO_ROOT_PASSWORD=${ARANGO_ROOT_PASSWORD}
+    ports:
+      - "8529:8529" # Default ArangoDB web UI and API port
+    volumes:
+      # Map local data directory for persistence
+      - ./data/arango:/var/lib/arangodb3 # ArangoDB data
+    restart: unless-stopped # Ensure the container keeps running
+    # In production, pin image version, change default password, add health checks, restart policy
+
+  # Qdrant - vector database for embeddings/semantic search
+  qdrant:
+    image: qdrant/qdrant:latest # Container image to use
+    ports:
+      - "6333:6333" # Default Qdrant API port
+    volumes:
+      - ./data/qdrant:/qdrant/storage # Persistent storage for vector data
+    restart: unless-stopped # Ensure the container keeps running
+    # In production, consider pinning image version, adding health checks, restart policy
+
+# Volume definitions for data persistence managed by Docker
+volumes:
+  nats-data: {} # Defines the named volume used by NATS

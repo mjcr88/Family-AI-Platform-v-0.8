@@ -1,0 +1,39 @@
+version: "3.8"
+
+networks:
+  shared_network:
+    name: shared_network
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+      - GENERIC_TIMEZONE=UTC
+    volumes:
+      - ../../data/n8n:/home/node/.n8n
+    networks:
+      - shared_network
+    env_file:
+      - ../config/env/.env.dev-tools
+
+  webui:
+    image: ghcr.io/open-webui/open-webui:latest
+    container_name: open-webui
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+    volumes:
+      - ../../data/webui:/data
+    networks:
+      - shared_network
+    env_file:
+      - ../config/env/.env.dev-tools
