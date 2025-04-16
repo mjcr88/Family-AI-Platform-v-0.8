@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  mcp-server:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    environment:
+      - TZ=America/New_York
+    restart: unless-stopped
+    volumes:
+      - ./config.json:/app/config.json
+    command: ["uvx", "mcpo", "--config", "/app/config.json"]
